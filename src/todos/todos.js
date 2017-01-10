@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default function($scope) {
   let params = {
     createHasInput: false
@@ -37,6 +39,10 @@ export default function($scope) {
   $scope.createTask = () => {
     params.createHasInput = false;
     $scope.createTaskInput = '';
+  };
+
+  $scope.deleteTask = todoToDelete => {
+    _.remove($scope.todos, todo => todo.task === todoToDelete.task)
   };
 
   $scope.$watch('createTaskInput', val => {
