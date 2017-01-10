@@ -8,6 +8,12 @@
     display: block;
     margin: 0 auto 20px;
   }
+
+  &_task {
+    &-completed {
+      text-decoration: line-through;
+    }
+  }
 }
 
 th, td {
