@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export default function($scope) {
+export default function($scope, todoFactory) {
   let params = {
     createHasInput: false
   };
@@ -31,29 +31,22 @@ export default function($scope) {
     todo.isEditing = false;
   };
 
-  $scope.updateTask = todo => {
-    todo.task = todo.updatedTask;
-    todo.isEditing = false;
-  };
+  const { updateTask,
+          createTask,
+          deleteTask,
+          watchCreateTaskInput} = todoFactory;
 
-  $scope.createTask = () => {
-    params.createHasInput = false;
-    $scope.createTaskInput = '';
-  };
+  $scope.updateTask = _.partial(updateTask);
 
-  $scope.deleteTask = todoToDelete => {
-    _.remove($scope.todos, todo => todo.task === todoToDelete.task)
-  };
+  $scope.createTask = _.partial(createTask,
+    $scope,
+    params);
 
-  $scope.$watch('createTaskInput', val => {
-    if (!val && params.createHasInput) {
-      $scope.todos.pop();
-      params.createHasInput = false;
-    } else if (val && !params.createHasInput) {
-      $scope.todos.push({ task: val, isCompleted: false });
-      params.createHasInput = true;
-    } else if (val && params.createHasInput){
-      $scope.todos[$scope.todos.length - 1].task = val;
-    }
-  })
+  $scope.deleteTask = _.partial(deleteTask,
+    $scope);
+
+  $scope.$watch('createTaskInput',
+                _.partial(watchCreateTaskInput,
+                  params,
+                  $scope));
 }
