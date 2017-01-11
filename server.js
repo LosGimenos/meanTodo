@@ -1,8 +1,14 @@
 const PORT = process.env.PORT || 3000;
 
 const express = require('express');
+const routes = require('src/server/routes');
+const bodyParser = require('body-parser');
 
 const app = express();
+
+app.use(bodyParser.json());
+
+routes(app);
 
 app.all('/*', function(req, res) {
   res.send('\
